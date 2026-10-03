@@ -1,57 +1,41 @@
 import 'package:flutter/material.dart';
+
+import '../../../app/routes/app_routes.dart';
 import '../../../app/theme/app_colors.dart';
+import '../widgets/customer_widgets.dart';
 
 class PlaceDetailScreen extends StatelessWidget {
   const PlaceDetailScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.background,
-      appBar: AppBar(
-        title: const Text('Place Details', style: TextStyle(color: AppColors.textPrimary, fontSize: 18)),
-        backgroundColor: AppColors.surface,
-        elevation: 0,
-        iconTheme: const IconThemeData(color: AppColors.textPrimary),
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              height: 180,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: Colors.green.shade100,
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: const Icon(Icons.park, size: 64, color: Colors.green),
-            ),
-            const SizedBox(height: 16),
-            const Text(
-              'Central City Park',
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
-            ),
-            const SizedBox(height: 4),
-            const Text('Public Recreation Park • Open 24/7', style: TextStyle(color: AppColors.textSecondary)),
-            const SizedBox(height: 16),
-            const Divider(color: AppColors.divider),
-            const SizedBox(height: 12),
-            const Text('Amenities', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-            const SizedBox(height: 8),
-            Wrap(
-              spacing: 8,
-              children: const [
-                Chip(label: Text('Jogging Track')),
-                Chip(label: Text('Kids Play Area')),
-                Chip(label: Text('Free Parking')),
-                Chip(label: Text('Pet Friendly')),
-              ],
-            ),
-          ],
-        ),
-      ),
+    const c = AppColors.places;
+    final nav = Navigator.of(context);
+    return CustomerScaffold(
+      navIndex: 0,
+      children: [
+        const ScreenHeader(title: 'City Hospital', trailing: SaveButton()),
+        const SizedBox(height: 10),
+        const PhotoPlaceholder(color: c, icon: Icons.local_hospital_outlined),
+        const SizedBox(height: 14),
+        const InfoRow(icon: Icons.emergency_outlined, text: 'Emergency 24x7 / Ambulance', color: AppColors.sos),
+        const InfoRow(icon: Icons.place_outlined, text: 'Station Road, Kolhapur'),
+        const InfoRow(icon: Icons.schedule, text: 'OPD 9 am to 8 pm · Emergency always open'),
+        const SizedBox(height: 14),
+        PrimaryButton(label: 'Call', icon: Icons.call, color: c, onPressed: () => comingSoon(context, 'Calling')),
+        const SizedBox(height: 10),
+        GhostButton(
+            label: 'Directions',
+            icon: Icons.directions_outlined,
+            color: c,
+            onPressed: () => nav.pushNamed(AppRoutes.map)),
+        const SizedBox(height: 10),
+        GhostButton(
+            label: 'Report wrong info',
+            icon: Icons.flag_outlined,
+            color: c,
+            onPressed: () => nav.pushNamed(AppRoutes.reportWrongInfo)),
+      ],
     );
   }
 }

@@ -1,88 +1,63 @@
 import 'package:flutter/material.dart';
-import '../../../app/theme/app_colors.dart';
 
-class ReportWrongInfoScreen extends StatelessWidget {
+import '../../../app/theme/app_colors.dart';
+import '../widgets/customer_widgets.dart';
+
+class ReportWrongInfoScreen extends StatefulWidget {
   const ReportWrongInfoScreen({super.key});
+  @override
+  State<ReportWrongInfoScreen> createState() => _ReportWrongInfoScreenState();
+}
+
+class _ReportWrongInfoScreenState extends State<ReportWrongInfoScreen> {
+  int _sel = 0;
+  final _details = TextEditingController();
+
+  @override
+  void dispose() {
+    _details.dispose();
+    super.dispose();
+  }
+
+  void _send() {
+    final m = ScaffoldMessenger.of(context);
+    m.showSnackBar(const SnackBar(
+        content: Text('Thanks. Our team will check this.'), behavior: SnackBarBehavior.floating));
+    Navigator.of(context).maybePop();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.background,
-      appBar: AppBar(
-        title: const Text('Report Incorrect Info', style: TextStyle(color: AppColors.textPrimary, fontSize: 18)),
-        backgroundColor: AppColors.surface,
-        elevation: 0,
-        iconTheme: const IconThemeData(color: AppColors.textPrimary),
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Help us keep LocaLink accurate',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 4),
-            const Text(
-              'Select what information is incorrect for this listing:',
-              style: TextStyle(color: AppColors.textSecondary, fontSize: 13),
-            ),
-            const SizedBox(height: 16),
-            CheckboxListTile(
-              title: const Text('Incorrect Opening Hours'),
-              value: false,
-              onChanged: (v) {},
-            ),
-            CheckboxListTile(
-              title: const Text('Phone Number Not Working'),
-              value: false,
-              onChanged: (v) {},
-            ),
-            CheckboxListTile(
-              title: const Text('Location/Address is Wrong'),
-              value: false,
-              onChanged: (v) {},
-            ),
-            CheckboxListTile(
-              title: const Text('Business Permanently Closed'),
-              value: false,
-              onChanged: (v) {},
-            ),
-            const SizedBox(height: 16),
-            TextField(
-              maxLines: 4,
-              decoration: InputDecoration(
-                hintText: 'Additional details (optional)...',
-                fillColor: AppColors.surface,
-                filled: true,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  borderSide: const BorderSide(color: AppColors.border),
-                ),
-              ),
-            ),
-            const SizedBox(height: 24),
-            SizedBox(
-              width: double.infinity,
-              height: 48,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primary,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                ),
-                onPressed: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Report submitted. Thank you!')),
-                  );
-                  Navigator.pop(context);
-                },
-                child: const Text('Submit Report', style: TextStyle(fontWeight: FontWeight.bold)),
-              ),
-            ),
-          ],
+    return CustomerScaffold(
+      children: [
+        const ScreenHeader(title: 'Report wrong info'),
+        const SizedBox(height: 12),
+        const SectionLabel('What is wrong?'),
+        ChipRow(
+          labels: const ['Closed', 'Wrong phone', 'Wrong location'],
+          selected: _sel,
+          onSelected: (i) => setState(() => _sel = i),
         ),
-      ),
+        const SizedBox(height: 16),
+        const SectionLabel('Details'),
+        TextField(
+          controller: _details,
+          maxLines: 4,
+          decoration: InputDecoration(
+            hintText: 'Tell us more (optional)',
+            hintStyle: const TextStyle(color: AppColors.muted),
+            filled: true,
+            fillColor: Colors.white,
+            enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(14), borderSide: const BorderSide(color: AppColors.line)),
+            focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(14),
+                borderSide: const BorderSide(color: AppColors.primary, width: 1.6)),
+          ),
+        ),
+        const SizedBox(height: 20),
+        PrimaryButton(label: 'Send', onPressed: _send),
+      ],
     );
   }
 }

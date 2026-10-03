@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+
 import '../../../app/routes/app_routes.dart';
 import '../../../app/theme/app_colors.dart';
+import '../widgets/customer_widgets.dart';
 
 class SignUpGateScreen extends StatelessWidget {
   const SignUpGateScreen({super.key});
@@ -8,106 +10,52 @@ class SignUpGateScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-        leading: IconButton(
-          icon: const Icon(Icons.close, color: AppColors.textPrimary),
-          onPressed: () => Navigator.pop(context),
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [AppColors.primary, Color(0xFF07343A)],
+          ),
         ),
-      ),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(children: [
+              Align(
+                alignment: Alignment.centerLeft,
+                child: RoundIconButton(
+                    icon: Icons.close, onTap: () => Navigator.of(context).maybePop()),
+              ),
               const Spacer(),
               Container(
-                padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  color: AppColors.primaryLight,
-                  shape: BoxShape.circle,
-                ),
-                child: const Icon(
-                  Icons.lock_outline_rounded,
-                  size: 64,
-                  color: AppColors.primary,
-                ),
+                width: 88,
+                height: 88,
+                decoration: const BoxDecoration(color: Color(0x26FFFFFF), shape: BoxShape.circle),
+                child: const Icon(Icons.verified_user_outlined, color: Colors.white, size: 42),
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 22),
               const Text(
-                'Account Required',
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.textPrimary,
-                ),
-              ),
-              const SizedBox(height: 12),
-              const Text(
-                'To contact vendors, save listings, or write reviews on LocaLink, please create an account or sign in.',
+                'Create an account to browse services and book',
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 14,
-                  color: AppColors.textSecondary,
-                  height: 1.4,
-                ),
+                style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.w800, height: 1.25),
               ),
               const Spacer(),
-              SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primary,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                  onPressed: () {
-                    // Navigate to Main Authenticated Home after simulated login
-                    Navigator.pushNamedAndRemoveUntil(
-                      context,
-                      AppRoutes.home,
-                      (route) => false,
-                    );
-                  },
-                  child: const Text(
-                    'Create Account / Sign In',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
+              PrimaryButton(
+                label: 'Continue with Google',
+                onDark: true,
+                icon: Icons.account_circle_outlined,
+                onPressed: () => comingSoon(context, 'Google sign in'),
               ),
               const SizedBox(height: 12),
-              SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: OutlinedButton(
-                  style: OutlinedButton.styleFrom(
-                    side: const BorderSide(color: AppColors.border),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                  onPressed: () => Navigator.pop(context),
-                  child: const Text(
-                    'Continue as Guest',
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.textSecondary,
-                    ),
-                  ),
-                ),
+              GhostButton(
+                label: 'Explore Places and Shops',
+                onDark: true,
+                onPressed: () => Navigator.of(context)
+                    .pushNamedAndRemoveUntil(AppRoutes.guestHome, (r) => false),
               ),
-              const SizedBox(height: 24),
-            ],
+              const SizedBox(height: 8),
+            ]),
           ),
         ),
       ),
